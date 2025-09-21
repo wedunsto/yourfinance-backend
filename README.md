@@ -50,6 +50,6 @@ YourFinance is a **progressive web application (PWA)** designed to help users ta
 ### Frontend Setup
 
 ```bash
-cd YourFinance/frontend
-npm install
-ionic serve
+cd yourfinance-backend
+dotnet restore
+dotnet run
