@@ -1,0 +1,82 @@
+# Build artifacts
+bin/
+obj/
+out/
+artifacts/
+
+# Visual Studio / Rider
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code
+.vscode/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+*.nuspec
+packages/
+# Uncomment if using global packages folder
+# .nuget/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Database
+*.mdf
+*.ldf
+
+# Test results
+TestResult*/
+*.trx
+*.coverage
+*.coveragexml
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Publish profiles
+*.pubxml
+*.publishproj
+
+# Azure
+*.azurePubxml
+PublishScripts/
+
+# Docker
+docker-compose.override.yml
+*.dbmdl
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Secrets (don’t commit your keys!)
+appsettings.Development.json
+appsettings.*.json
+*.secret.json
+
+# JetBrains Rider
+.idea/
+
+# Entity Framework Migrations (optional – keep if you want in source control)
+# Migrations/
+
