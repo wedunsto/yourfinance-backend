@@ -12,36 +12,132 @@
         {"name": "Login"}
     ],
     "paths": {
-        "/users": {
+        "/users/register":{
             "post": {
                 "tags": ["Registration"],
-                "summary": "Rgister a new user",
+                "summary": "Register a new user",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
-                            "schema": { "$ref": "#/schemas/RegisterRequest" }
+                            "schema": { "$ref": "#/components/schemas/AuthorizationRequest" }
                         }
                     }
                 },
                 "responses": {
                     "201": {
-                        "description": "Account created"
+                        "description": "Account created",
+                        "content": {
+                            "application/json": {
+                                "schema": { "$ref": "#/components/schemas/UserCreated"}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/ErrorResponse"}
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Username already exists",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/ErrorResponse"}
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Service unavailable",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/ErrorResponse"}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login":{
+            "post": {
+                "tags": ["Login"],
+                "summary": "Log in an existing user",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": { "$ref": "#/components/schemas/AuthorizationRequest" }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Account logged in",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref":"#/components/schemas/UserLoggedIn"}
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Missing fields",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/ErrorResponse"}
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Incorrect username or password",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/ErrorResponse"}
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Account not verified",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/ErrorResponse"}
+                            }
+                        }
                     }
                 }
             }
         }
     },
-    "schemas": {
-        "RegisterRequest": {
-            "type": "object",
-            "required": ["username", "password"],
-            "properties": {
-                "username": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
+    "components": {
+        "schemas": {
+            "AuthorizationRequest": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                    "username": {"type": "string", "example": "wedunsto"},
+                    "password": {"type": "string", "example": "N9qo8uLOickgx2ZMRZoMye"}
+                }
+            },
+            "UserCreated": {
+                "type": "object",
+                "properties": {
+                    "id": {"type": "string", "example": "1234"},
+                    "username": {"type": "string", "example": "William"}
+                }
+            },
+            "UserLoggedIn": {
+                "type": "object",
+                "properties": {
+                    "accessToken": {"type": "string", "example": "12a34"}
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "required": ["error", "message"],
+                "properties": {
+                    "error": {"type": "string", "example": "INVALID_CREDENTIALS"},
+                    "message": {"type": "string", "example": "Incorrect username or password"}
                 }
             }
         }
