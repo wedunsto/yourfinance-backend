@@ -8,7 +8,6 @@ public class AuthenticationService {
     // Business logic used to handle registration requests
     public RegistrationResponse Register (AuthorizationRequest request) {
         var newUser = new RegistrationResponse {
-            Id = Guid.NewGuid().ToString(),
             Username = request.Username,
             AccountStatus = "New",
         };

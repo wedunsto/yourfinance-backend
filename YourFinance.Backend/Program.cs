@@ -8,11 +8,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<AuthenticationService>(); // Register the authorization service
+builder.Services.AddScoped<UserExistsService>();
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
         policy
             .WithOrigins("http://localhost:8080") // Allow requests from Swagger UI
+            .WithOrigins("http://localhost:4200") // Allow localhost for Ionic Angular
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
