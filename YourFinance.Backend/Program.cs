@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // connection string to the yourfinance SQL database
 var connString = builder.Configuration.GetConnectionString("Default");
 
+// connection string to the yourfinance endpoints
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -22,8 +26,7 @@ builder.Services.AddScoped<UserExistsService>();
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(policy => {
         policy
-            .WithOrigins("http://localhost:8080") // Allow requests from Swagger UI
-            .WithOrigins("http://localhost:4200") // Allow localhost for Ionic Angular
+            .WithOrigins(allowedOrigins ?? Array.Empty<string>())
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
