@@ -8,10 +8,38 @@
         {"url": "http://localhost:3000", "description": "Local development"}
     ],
     "tags": [
+        {"name": "Authentication"},
         {"name": "Registration"},
         {"name": "Login"}
     ],
     "paths": {
+        "/users/exists":{
+            "get": {
+                "tags": ["Authentication"],
+                "summary": "Check if a username exist in the application or not",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                        "type": "string",
+                        "example": "wedunsto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Determine if a username exists or not",
+                        "content": {
+                            "application/json": {
+                                "schema": {"$ref": "#/components/schemas/UserExistsResponse"}
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/users/register":{
             "post": {
                 "tags": ["Registration"],
@@ -111,6 +139,15 @@
     },
     "components": {
         "schemas": {
+            "UserExistsResponse": {
+                "type": "object",
+                "properties": {
+                    "exists": {
+                    "type": "boolean",
+                    "example": true
+                    }
+                }
+            },
             "AuthorizationRequest": {
                 "type": "object",
                 "required": ["username", "password"],

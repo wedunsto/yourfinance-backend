@@ -1,38 +1,65 @@
+using Microsoft.EntityFrameworkCore;
+using YourFinance.Backend.Data;
 using YourFinance.Backend.Models; // Use the DTOs in the Models folder
 
 namespace YourFinance.Backend.Services;
 
 // Business logic used to handle registration and login requests
 public class AuthenticationService {
+    // Gain access to CRUD data on the SQL database
+    private readonly AppDbContext _db;
+
+    public AuthenticationService(AppDbContext db) {
+        _db = db;
+    }
 
     // Business logic used to handle registration requests
-    public RegistrationResponse Register (AuthorizationRequest request) {
-        var newUser = new RegistrationResponse {
-            Id = Guid.NewGuid().ToString(),
-            Username = request.Username,
-            AccountStatus = "New",
+    public async Task<RegistrationResponse> Register(AuthorizationRequest request)
+    {
+        // Enforce unique username
+        var exists = await _db.Users.AnyAsync(u => u.username == request.Username);
+
+        if (exists) throw new InvalidOperationException("Username already exists.");
+
+        var password = BCrypt.Net.BCrypt.HashPassword(request.Password, workFactor: 12);
+
+        var registered = new RegistrationResponse {
+            username = request.Username,
+            account_status = "new",
         };
 
-        // TODO: Create new SQL database entry in the YourFinance database - Users table
+        var newUser = new User {
+            username = request.Username,
+            password = password,
+            account_status = "new",
+        };
 
-        return newUser;
+        _db.Users.Add(newUser);
+        await _db.SaveChangesAsync();
+
+        return registered;
     }
 
     // Business logic used to handle login requests
-    public LoginResponse Login (AuthorizationRequest request) {
-        // TODO: Query database for username in request
-        
-        // TODO: Validate username and password
-        /*
-        if (user == null)
-        {
-            throw new UnauthorizedAccessException("User not found");
-        }
-        */
+    public async Task<LoginResponse> Login (AuthorizationRequest request) {
+        var userData = await _db.Users.SingleOrDefaultAsync(u => u.username == request.Username);
 
-        return new LoginResponse {
+        // TODO: throw the right exception if for some reason userData is null
+        if (userData == null) throw new UnauthorizedAccessException("Invalid credentials.");
+
+        var password = BCrypt.Net.BCrypt.Verify(request.Password, userData.password);
+
+        if (!password) throw new UnauthorizedAccessException("Invalid credentials.");
+
+        // Store when the username was logged in
+        userData.updated_at = DateTimeOffset.UtcNow;
+        await _db.SaveChangesAsync();
+
+        // TODO: Implement JWT for users to CRUD account specific data
+        return new LoginResponse
+        {
             AccessToken = "fake-token-123", // Stub JWT
-            AccountStatus = "New" // Stub account status existing user
+            account_status = userData.account_status
         };
     }
 }

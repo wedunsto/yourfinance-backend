@@ -17,15 +17,29 @@ public class AuthenticationController : ControllerBase {
 
     // POST route controller used to handle requests to create new accounts
     [HttpPost("register")]
-    public IActionResult Register([FromBody] AuthorizationRequest request) {
-        var newUser = _authService.Register(request);
-        return Created("", newUser);
+    public async Task<IActionResult> Register([FromBody] AuthorizationRequest request) {
+        try {
+            var newUser = await _authService.Register(request);
+            return Created("", newUser);
+        }
+        catch (InvalidOperationException ex) {
+            return Conflict(new { message = ex.Message }); // 409 for duplicate username
+        }
+        catch (ArgumentException ex) {
+            return BadRequest(new { message = ex.Message }); // 400 for validation
+        }
+
     }
 
     // POST route controller used to handle requests to log into existing accounts
     [HttpPost("login")]
-    public IActionResult Login([FromBody] AuthorizationRequest request) {
-        var existingUser = _authService.Login(request);
-        return Ok(existingUser);
+    public async Task<IActionResult> Login([FromBody] AuthorizationRequest request) {
+        try {
+            var existingUser = await _authService.Login(request);
+            return Ok(existingUser);
+        }
+        catch (UnauthorizedAccessException) {
+            return Unauthorized(new { message = "Invalid credentials." });
+        }
     }
 }
