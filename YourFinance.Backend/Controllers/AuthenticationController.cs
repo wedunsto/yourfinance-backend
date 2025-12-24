@@ -20,7 +20,7 @@ public class AuthenticationController : ControllerBase {
     public async Task<IActionResult> Register([FromBody] AuthorizationRequest request) {
         try {
             var newUser = await _authService.Register(request);
-            return Created("", newUser);
+            return Created("", newUser); // 201 for successful account creation
         }
         catch (InvalidOperationException ex) {
             return Conflict(new { message = ex.Message }); // 409 for duplicate username
@@ -28,7 +28,10 @@ public class AuthenticationController : ControllerBase {
         catch (ArgumentException ex) {
             return BadRequest(new { message = ex.Message }); // 400 for validation
         }
-
+        catch (Exception)
+        {
+            return StatusCode(500, new { message = "An unexpected error occurred." });
+        }
     }
 
     // POST route controller used to handle requests to log into existing accounts
