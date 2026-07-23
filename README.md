@@ -1,7 +1,7 @@
-# yourfinance-backend
-# YourFinance
+# yourBible-backend
+# YourBible
 
-YourFinance is a **progressive web application (PWA)** designed to help users take control of their personal finances. Built with a modern tech stack—**Ionic Angular frontend** and **C# .NET backend**—it leverages **OpenAI's API** to intelligently process receipts and provide meaningful financial insights.
+YourBible is a progressive web application (PWA) designed to help users take control of their personal Bibles. Built with a modern tech stack—Ionic Angular frontend and C# .NET backend—it leverages OpenAI's API to intelligently process receipts and provide meaningful financial insights.
 
 ---
 
