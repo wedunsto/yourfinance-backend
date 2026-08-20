@@ -1,7 +1,7 @@
 # yourBible-backend
 # YourBible
 
-YourBible is a progressive web application (PWA) designed to help users take control of their personal Bibles. Built with a modern tech stack—Ionic Angular frontend and C# .NET backend—it leverages OpenAI's API to intelligently process receipts and provide meaningful financial insights.
+YourBible is a progressive web application (PWA) designed to help users take control of their personal Bibles. Built with a modern tech stack—Ionic Angular frontend and Node.js backend—it leverages Anthropic's API to intelligently process receipts and provide meaningful financial insights.
 
 ---
 
@@ -32,7 +32,7 @@ YourBible is a progressive web application (PWA) designed to help users take con
 | Layer         | Technology           |
 |--------------|----------------------|
 | Frontend     | Ionic + Angular      |
-| Backend      | C# .NET Web API      |
+| Backend      | Node.js      |
 | AI Integration | OpenAI API          |
 | Data Storage | PostgreSQL           |
 
@@ -43,13 +43,12 @@ YourBible is a progressive web application (PWA) designed to help users take con
 ### Prerequisites
 
 - Node.js & npm
-- .NET 7 SDK or later
 - PostgreSQL
-- OpenAI API Key
+- Anthropic API Key
 
 ### Frontend Setup
 
 ```bash
 cd yourfinance-backend
-dotnet restore
-dotnet run
+npm ci
+npm run start
